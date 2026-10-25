@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Set up your skills — CrossSkill</title>
+<link rel="stylesheet" href="css/tokens.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/setup.css">
+</head>
+<body>
+<div class="grain"></div>
+<div id="toast"><span class="dot"></span><span id="toast-msg"></span></div>
+
+<div class="setup-wrap">
+  <div class="eyebrow">Step 3 of 3 · Profile completion</div>
+  <h1 style="margin:12px 0 6px; font-size:30px;">What will you trade?</h1>
+  <p style="color:var(--ink-70); font-size:14.5px; margin-bottom:28px;">Add at least one skill you can teach and one you want to learn. The matching engine needs both sides.</p>
+  <div class="setup-progress"><span class="done"></span><span class="done"></span><span class="done"></span></div>
+
+  <div class="skill-block">
+    <h3>What I can teach</h3>
+    <div class="sub">Your offered skills — shown to peers looking to learn from you.</div>
+    <div class="skill-form-grid">
+      <div class="field" style="margin:0;"><label>Skill</label><input id="off-skill" placeholder="e.g. Python"></div>
+      <div class="field" style="margin:0;"><label>Category</label>
+        <select id="off-cat"><option>Programming</option><option>Web Development</option><option>Data Science</option><option>Design</option><option>Communication</option><option>Marketing</option></select>
+      </div>
+      <div class="field" style="margin:0;"><label>Level</label>
+        <select id="off-lvl"><option>Beginner</option><option>Intermediate</option><option selected>Advanced</option></select>
+      </div>
+      <button class="btn btn-outline btn-sm" onclick="addSkill('offered')">Add</button>
+    </div>
+    <div class="chip-list" id="offered-chips"></div>
+  </div>
+
+  <div class="skill-block">
+    <h3>What I want to learn</h3>
+    <div class="sub">Your desired skills — the engine looks for peers who offer these.</div>
+    <div class="skill-form-grid">
+      <div class="field" style="margin:0;"><label>Skill</label><input id="des-skill" placeholder="e.g. React"></div>
+      <div class="field" style="margin:0;"><label>Category</label>
+        <select id="des-cat"><option>Programming</option><option selected>Web Development</option><option>Data Science</option><option>Design</option><option>Communication</option><option>Marketing</option></select>
+      </div>
+      <div class="field" style="margin:0;"><label>Target level</label>
+        <select id="des-lvl"><option>Beginner</option><option selected>Intermediate</option><option>Advanced</option></select>
+      </div>
+      <button class="btn btn-outline btn-sm" onclick="addSkill('desired')">Add</button>
+    </div>
+    <div class="chip-list" id="desired-chips"></div>
+  </div>
+
+  <button class="btn btn-brass" style="width:100%;" onclick="finishSetup()">Save & explore matches →</button>
+</div>
+
+<script src="js/store.js"></script>
+<script src="js/toast.js"></script>
+<script src="js/setup.js"></script>
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CrossSkill — Login</title>
+  <link rel="stylesheet" href="/css/tokens.css">
+  <link rel="stylesheet" href="/css/auth.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+  <div class="auth-card">
+    <h2>Student Sign In</h2>
+    <p class="subtitle">Enter your college credentials to access the skill-swap ecosystem.</p>
+
+    <form id="loginForm" onsubmit="handleLogin(event)">
+      <label>Email Address</label>
+      <input type="email" id="loginEmail" class="input-control" required placeholder="harshal1@college.edu">
+
+      <label>Password</label>
+      <input type="password" id="loginPassword" class="input-control" required placeholder="pass123">
+
+      <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Sign In</button>
+    </form>
+
+    <div style="margin-top: 1.5rem; text-align: center;">
+      <small style="color: var(--text-muted);">New student? <a href="/signup.html" style="color: var(--accent);">Create an account</a></small>
+    </div>
+  </div>
+
+  <script>
+    async function handleLogin(e) {
+      e.preventDefault();
+      const email = document.getElementById('loginEmail').value.trim();
+      const password = document.getElementById('loginPassword').value;
+
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        Swal.fire({
+          title: 'Welcome Back!',
+          text: `Logged in as ${data.name}`,
+          icon: 'success',
+          timer: 1200,
+          showConfirmButton: false
+        }).then(() => {
+          window.location.href = '/app/discover.html';
+        });
+      } else {
+        Swal.fire('Authentication Error', data.message || 'Invalid email or password', 'error');
+      }
+    }
+  </script>
+</body>
+</html>

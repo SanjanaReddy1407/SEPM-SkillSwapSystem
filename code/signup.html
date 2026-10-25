@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CrossSkill — Sign Up & Profile Setup</title>
+  <link rel="stylesheet" href="/css/tokens.css">
+  <link rel="stylesheet" href="/css/auth.css">
+  <link rel="stylesheet" href="/css/components.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+  <div class="auth-card" style="max-width: 580px;">
+    <h2>Create Your CrossSkill Account</h2>
+    <p class="subtitle">Complete your profile to join the student skill barter database.</p>
+
+    <form id="signupForm" onsubmit="handleSignup(event)">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+        <div>
+          <label>Full Name</label>
+          <input type="text" id="regName" class="input-control" required placeholder="Ms. Reddy Sanjana Yogesh">
+        </div>
+        <div>
+          <label>College Email</label>
+          <input type="email" id="regEmail" class="input-control" required placeholder="sanjana@college.edu">
+        </div>
+      </div>
+
+      <label>Password</label>
+      <input type="password" id="regPassword" class="input-control" required placeholder="••••••••">
+
+      <hr style="border:0; border-top: 1px solid var(--border); margin: 1.25rem 0;">
+
+      <label>Skill Category</label>
+      <select id="regCategory" class="input-control" required>
+        <option value="">Loading Categories from DB...</option>
+      </select>
+
+      <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 1rem;">
+        <div>
+          <label>Offered Skill (I can teach)</label>
+          <input type="text" id="regOfferedSkill" class="input-control" required placeholder="e.g. Python">
+        </div>
+        <div>
+          <label>Skill Level</label>
+          <select id="regSkillLevel" class="input-control" required>
+            <option value="Beginner">Beginner</option>
+            <option value="Intermediate">Intermediate</option>
+            <option value="Proficient">Proficient</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 1rem;">
+        <div>
+          <label>Desired Skill (I want to learn)</label>
+          <input type="text" id="regDesiredSkill" class="input-control" required placeholder="e.g. React.js">
+        </div>
+        <div>
+          <label>Desired Level</label>
+          <select id="regDesiredLevel" class="input-control" required>
+            <option value="Beginner">Beginner</option>
+            <option value="Intermediate">Intermediate</option>
+            <option value="Proficient">Proficient</option>
+          </select>
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Create Account & Enter</button>
+    </form>
+  </div>
+
+  <script>
+    // Load categories directly from CS1.db
+    document.addEventListener('DOMContentLoaded', async () => {
+      const res = await fetch('/api/categories');
+      const cats = await res.json();
+      const select = document.getElementById('regCategory');
+      select.innerHTML = cats.map(c => `<option value="${c.category_id}">${c.category_name}</option>`).join('');
+    });
+
+    async function handleSignup(e) {
+      e.preventDefault();
+      const payload = {
+        name: document.getElementById('regName').value.trim(),
+        email: document.getElementById('regEmail').value.trim(),
+        password: document.getElementById('regPassword').value,
+        category_id: parseInt(document.getElementById('regCategory').value),
+        offered_skill: document.getElementById('regOfferedSkill').value.trim(),
+        skill_level: document.getElementById('regSkillLevel').value,
+        desired_skill: document.getElementById('regDesiredSkill').value.trim(),
+        desired_level: document.getElementById('regDesiredLevel').value
+      };
+
+      const res = await fetch('/api/auth/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        Swal.fire({
+          title: 'Account Created!',
+          text: 'Your profile has been saved to CS1.db.',
+          icon: 'success'
+        }).then(() => {
+          window.location.href = '/app/discover.html';
+        });
+      } else {
+        Swal.fire('Registration Error', data.message, 'error');
+      }
+    }
+  </script>
+</body>
+</html>
